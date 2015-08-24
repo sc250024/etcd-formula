@@ -1,0 +1,14 @@
+# -*- coding: utf-8 -*-
+# vim: ft=yaml
+
+etcd:
+  binary_directory: /opt/etcd
+  data_directory: /var/etcd
+
+  cluster:
+    token: my-etcd-cluster
+  
+  install:
+    base_url: http://github.com/coreos/etcd/releases/download
+    version: 2.1.2
+
