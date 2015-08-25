@@ -1,13 +1,21 @@
 {% from "etcd/map.jinja" import etcd_settings with context -%}
 
-{% set peers = [] -%}
+{% set node_ip = grains['fqdn_ip4'][0] -%}
+{% set peer_port = etcd_settings.cluster.peer_port -%}
+{% set client_port = etcd_settings.cluster.client_port -%}
 
-env ETCD_INITIAL_CLUSTER="etcd-01=http://192.168.101.101:2380,etcd-02=http://192.168.101.102:2380,etcd-03=http://192.168.101.103:2380"
+{% if etcd_settings.cluster.peers is not defined %}
+{% set peers = grains['host'] + "=http://" + node_ip + ":" + peer_port -%}
+{% else -%}
+{% set peers = etcd.settings.cluster.peers -%}
+{% endif %}
+
+env ETCD_INITIAL_CLUSTER="{{ peers }}"
 env ETCD_INITIAL_CLUSTER_STATE="new"
 env ETCD_INITIAL_CLUSTER_TOKEN="{{ etcd_settings.cluster.token }}"
-env ETCD_INITIAL_ADVERTISE_PEER_URLS="http://{{ grains['fqdn_ip4'] }}:2380"
+env ETCD_INITIAL_ADVERTISE_PEER_URLS="http://{{ node_ip }}:{{ peer_port }}"
 env ETCD_DATA_DIR="{{ etcd_settings.data_directory }}"
-env ETCD_LISTEN_PEER_URLS="http://{{ grains['fqdn_ip4'] }}:2380"
-env ETCD_LISTEN_CLIENT_URLS="http://{{ grains['fqdn_ip4'] }}:2379"
-env ETCD_ADVERTISE_CLIENT_URLS="http://{{ grains['fqdn_ip4'] }}:2379"
+env ETCD_LISTEN_PEER_URLS="http://{{ node_ip }}:{{ peer_port }}"
+env ETCD_LISTEN_CLIENT_URLS="http://{{ node_ip }}:{{ client_port }}"
+env ETCD_ADVERTISE_CLIENT_URLS="http://{{ node_ip }}:{{ client_port }}"
 env ETCD_NAME="{{ grains['host'] }}"

@@ -1,0 +1,5 @@
+{% from "etcd/map.jinja" import etcd_settings with context -%}
+
+etcd_config:
+  etcd.host: {{ etcd_settings.cluster.client_host }}
+  etcd.port: {{ etcd_settings.cluster.client_port }}

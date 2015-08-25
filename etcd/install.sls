@@ -1,4 +1,4 @@
--*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 # vim: ft=yaml
 
 {% from "etcd/map.jinja" import etcd_settings with context -%}
@@ -32,6 +32,8 @@ etcd-upstart-file:
     - group: root
     - mode: 0644
     - template: jinja
+    - watch_in:
+        service: etcd-service
 
 etcd-upstart-override:
   file.managed:
@@ -41,6 +43,8 @@ etcd-upstart-override:
     - group: root
     - mode: 0644
     - template: jinja
+    - watch_in:
+        service: etcd-service
 
 etcd-service:
   service.running:
