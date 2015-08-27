@@ -21,15 +21,15 @@ Example Pillar:
 
 .. code:: yaml
 
-etcd:
-  cluster:
-    peers:
-      node-1:
-        ip: 192.168.1.10
-      node-2:
-        ip: 192.168.1.11
-      node-3:
-        ip: 192.168.1.12
+  etcd:
+    cluster:
+      peers:
+        node-1:
+          ip: 192.168.1.10
+        node-2:
+          ip: 192.168.1.11
+        node-3:
+          ip: 192.168.1.12
 
 ``proxy``
 ---------
