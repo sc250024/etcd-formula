@@ -3,17 +3,12 @@
 
 etcd:
   binary_directory: /opt/etcd
-  data_directory: /opt/etcd
+  data_directory: /opt/etcd/data
 
   cluster:
     token: my-etcd-cluster
-    peers:
-      localhost:
-         ip: 127.0.0.1
     peer_port: 2380
     client_port: 2379
-# this is only a temporary solution until we can resolve the client hosts automatically
-    client_host: 127.0.0.1
   
   install:
     base_url: http://github.com/coreos/etcd/releases/download
