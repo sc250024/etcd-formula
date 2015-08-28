@@ -58,4 +58,4 @@ by Salt etcd module. The etcd.host entry points to the first node in the peer li
 Testing
 =======
 
-Not yet done.
+Right now, some basic testing is done on Travis CI.
