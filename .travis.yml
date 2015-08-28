@@ -7,13 +7,10 @@ env:
     - BS_PIP_ALLOWED=1
     - BS_ECHO_DEBUG=1
     - SALT_ARGS="-l debug --local --retcode-passthrough --pillar-root=test/pillar --file-root=$PWD"
-  matrix:
-    - SALT_RELEASE="develop"
-    - SALT_RELEASE="2015.8"
 
 before_install:
   - sudo apt-get update
-  - curl -L http://bootstrap.saltstack.org | sudo sh -E -s -- git $SALT_RELEASE
+  - curl -L http://bootstrap.saltstack.org | sudo sh -E -s -- stable
 
 install:
   - sudo mkdir -p /srv && sudo ln -sfn $PWD /srv/formula
