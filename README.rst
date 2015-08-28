@@ -1,4 +1,5 @@
-https://travis-ci.org/RobertFach/etcd-formula.svg?branch=master
+.. image:: https://travis-ci.org/RobertFach/etcd-formula.svg?branch=master
+    :target: https://travis-ci.org/RobertFach/etcd-formula
 
 etcd
 ====
