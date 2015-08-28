@@ -1,10 +1,33 @@
+language: python
+python:
+  - '2.7'
+
+env:
+  global:
+    - BS_PIP_ALLOWED=1
+    - BS_ECHO_DEBUG=1
+    - SALT_ARGS="-l debug --local --retcode-passthrough --pillar-root=test/pillar --file-root=$PWD"
+  matrix:
+    - SALT_RELEASE="develop"
+    - SALT_RELEASE="2015.8"
+
+before install:
+  - sudo apt-get update
+  - curl -L http://bootstrap.saltstack.org | sudo sh -s -- git $SALT_RELEASE
+
 install:
-  - sudo apt-get update -q
-  - sudo apt-get install -q virtualbox --fix-missing
-  - sudo wget -nv https://dl.bintray.com/mitchellh/vagrant/vagrant_1.7.2_x86_64.deb
-  - sudo dpkg -i vagrant_1.7.2_x86_64.deb
-  - bundle install
+  - sudo mkdir -p /srv && sudo ln -sfn $PWD /srv/formula
+  # See what kind of travis box you're on to help with making your states
+  # compatible with travis
+  - sudo salt-call grains.items --local  
+
+  # Additional debug help
+  - sudo cat /var/log/salt/*
+
+  # See what kind of travis box you're on
+  # to help with making your states compatible with travis
+  - sudo salt-call grains.items --local
 
 script:
-  - kitchen converge
-  - kitchen verify
+  - sudo salt-call state.show_highstate $SALT_ARGS
+
