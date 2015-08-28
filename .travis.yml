@@ -18,9 +18,6 @@ install:
   # compatible with travis
   - sudo salt-call grains.items --local  
 
-  # Additional debug help
-  - sudo cat /var/log/salt/*
-
   # See what kind of travis box you're on
   # to help with making your states compatible with travis
   - sudo salt-call grains.items --local
