@@ -11,7 +11,7 @@ env:
     - SALT_RELEASE="develop"
     - SALT_RELEASE="2015.8"
 
-before install:
+before_install:
   - sudo apt-get update
   - curl -L http://bootstrap.saltstack.org | sudo sh -s -- git $SALT_RELEASE
 
