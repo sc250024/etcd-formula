@@ -1,3 +1,5 @@
+https://travis-ci.org/RobertFach/etcd-formula.svg?branch=master
+
 etcd
 ====
 
