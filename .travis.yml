@@ -13,7 +13,7 @@ env:
 
 before_install:
   - sudo apt-get update
-  - curl -L http://bootstrap.saltstack.org | sudo sh -s -- git $SALT_RELEASE
+  - curl -L http://bootstrap.saltstack.org | sudo sh -E -s -- git $SALT_RELEASE
 
 install:
   - sudo mkdir -p /srv && sudo ln -sfn $PWD /srv/formula
