@@ -10,7 +10,7 @@ env:
 
 before_install:
   - sudo apt-get update
-  - curl -L http://bootstrap.saltstack.org | sudo sh -E -s -- stable
+  - curl -L http://bootstrap.saltstack.org | sudo sh -E -s -- -P stable
 
 install:
   - sudo mkdir -p /srv && sudo ln -sfn $PWD /srv/formula
