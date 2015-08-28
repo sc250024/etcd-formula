@@ -9,6 +9,7 @@ GEM
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (2.9.2)
+    rake (10.4.2)
     safe_yaml (1.0.4)
     test-kitchen (1.4.2)
       mixlib-shellout (>= 1.2, < 3.0)
@@ -24,4 +25,5 @@ PLATFORMS
 DEPENDENCIES
   kitchen-salt
   kitchen-vagrant
+  rake
   test-kitchen (> 1.2.0)
