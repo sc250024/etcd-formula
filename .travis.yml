@@ -7,6 +7,8 @@ env:
     - BS_PIP_ALLOWED=1
     - BS_ECHO_DEBUG=1
     - SALT_ARGS="-l debug --local --retcode-passthrough --pillar-root=test/pillar --file-root=$PWD"
+  matrix:
+    - STATE=etcd.install
 
 before_install:
   - sudo apt-get update
@@ -23,5 +25,6 @@ install:
   - sudo salt-call grains.items --local
 
 script:
-  - sudo salt-call state.show_highstate $SALT_ARGS
+  - sudo -E salt-call state.show_sls $STATE $SALT_ARGS
+  - sudo salt-call state.sls $STATE $SALT_ARGS
 
