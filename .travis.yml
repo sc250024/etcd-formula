@@ -9,7 +9,6 @@ env:
     - SALT_ARGS="-l debug --local --retcode-passthrough --pillar-root=test/pillar --file-root=$PWD"
   matrix:
     - STATE=etcd.install
-    - STATE=etcd.static
 
 before_install:
   - sudo apt-get update
