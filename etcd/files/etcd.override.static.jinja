@@ -6,16 +6,27 @@
 {% set peer_string = [] -%}
 
 {% for hostname,cfg in etcd_settings.cluster.peers.items() -%}
-{% if peer_string.append( hostname + "=http://" + cfg.ip + ":" + peer_port ) -%}
-{% endif -%}
-{% endfor %}
-
+  {% if peer_string.append( hostname + "=http://" + cfg.ip + ":" + peer_port ) -%}
+  {% endif -%}
+{% endfor -%}
+{% if grains['init'] == 'upstart' -%}
 env ETCD_INITIAL_CLUSTER="{{ peer_string|join(',') }}"
 env ETCD_INITIAL_CLUSTER_STATE="new"
 env ETCD_INITIAL_CLUSTER_TOKEN="{{ etcd_settings.cluster.token }}"
 env ETCD_INITIAL_ADVERTISE_PEER_URLS="http://{{ node_ip }}:{{ peer_port }}"
 env ETCD_DATA_DIR="{{ etcd_settings.data_directory }}"
-env ETCD_LISTEN_PEER_URLS="http://{{ node_ip }}:{{ peer_port }}"
-env ETCD_LISTEN_CLIENT_URLS="http://{{ node_ip }}:{{ client_port }}"
-env ETCD_ADVERTISE_CLIENT_URLS="http://{{ node_ip }}:{{ client_port }}"
+env ETCD_LISTEN_PEER_URLS="http://{{ node_ip }}:{{ peer_port }},http://127.0.0.1:{{ peer_port }}"
+env ETCD_LISTEN_CLIENT_URLS="http://{{ node_ip }}:{{ client_port }},http://127.0.0.1:{{ client_port }}"
+env ETCD_ADVERTISE_CLIENT_URLS="http://{{ node_ip }}:{{ client_port }},http://127.0.0.1:{{ client_port }}"
 env ETCD_NAME="{{ grains['host'] }}"
+{% elif grains['init'] == 'systemd' -%}
+ETCD_INITIAL_CLUSTER="{{ peer_string|join(',') }}"
+ETCD_INITIAL_CLUSTER_STATE="new"
+ETCD_INITIAL_CLUSTER_TOKEN="{{ etcd_settings.cluster.token }}"
+ETCD_INITIAL_ADVERTISE_PEER_URLS="http://{{ node_ip }}:{{ peer_port }}"
+ETCD_DATA_DIR="{{ etcd_settings.data_directory }}"
+ETCD_LISTEN_PEER_URLS="http://{{ node_ip }}:{{ peer_port }},http://127.0.0.1:{{ peer_port }}"
+ETCD_LISTEN_CLIENT_URLS="http://{{ node_ip }}:{{ client_port }},http://127.0.0.1:{{ client_port }}"
+ETCD_ADVERTISE_CLIENT_URLS="http://{{ node_ip }}:{{ client_port }},http://127.0.0.1:{{ client_port }}"
+ETCD_NAME="{{ grains['host'] }}"
+{% endif -%}

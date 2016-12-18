@@ -6,11 +6,17 @@
 {% set peer_string = [] -%}
 
 {% for hostname,cfg in etcd_settings.cluster.peers.items() -%}
-{% if peer_string.append( hostname + "=http://" + cfg.ip + ":" + peer_port ) -%}
-{% endif -%}
-{% endfor %}
-
+  {% if peer_string.append( hostname + "=http://" + cfg.ip + ":" + peer_port ) -%}
+  {% endif -%}
+{% endfor -%}
+{% if grains['init'] == 'upstart' -%}
 env ETCD_INITIAL_CLUSTER="{{ peer_string|join(',') }}"
 env ETCD_DATA_DIR="{{ etcd_settings.data_directory }}"
 env ETCD_LISTEN_CLIENT_URLS="http://{{ node_ip }}:{{ client_port }},http://127.0.0.1:{{ client_port }}"
 env ETCD_PROXY="ON"
+{% elif grains['init'] == 'systemd' -%}
+ETCD_INITIAL_CLUSTER="{{ peer_string|join(',') }}"
+ETCD_DATA_DIR="{{ etcd_settings.data_directory }}"
+ETCD_LISTEN_CLIENT_URLS="http://{{ node_ip }}:{{ client_port }},http://127.0.0.1:{{ client_port }}"
+ETCD_PROXY="ON"
+{% endif -%}

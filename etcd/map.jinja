@@ -1,20 +1,26 @@
 # -*- coding: utf-8 -*-
 # vim: ft=jinja
 
-{## Start with defaults from defaults.yaml ##}
+{# Start with defaults from defaults.yaml #}
 {% import_yaml "etcd/defaults.yaml" as default_settings %}
 
-{## Init specific options ##}
+{# Merge settings based on init grain #}
 {% set init_settings = salt['grains.filter_by']({
-    'systemd': {
-        'init_file_path': '/etc/systemd/system/remote_syslog.service'
-        'init_reload_cmd': 'systemctl daemon-reload'
-    },
     'upstart': {
-        'init_file_path': '/etc/init/remote_syslog.conf',
+        'init_file_path': '/etc/init/etcd.conf',
         'init_reload_cmd': 'initctl reload-configuration',
+        'init_override_file': '/etc/init/etcd.override',
     },
-}, grain='init', merge=default_settings, default='systemd') %}
+    'systemd': {
+        'init_file_path': '/etc/systemd/system/etcd.service',
+        'init_reload_cmd': 'systemctl daemon-reload',
+        'init_override_file': '/etc/systemd/system/etcd.override',
+    },
+}, grain='init', merge=default_settings.etcd) %}
 
 {# Update settings defaults from pillar data #}
-{% set etcd_settings = salt['pillar.get']('etcd', merge=init_settings) %}
+{% set etcd_settings = salt['pillar.get'](
+    'etcd',
+    default=init_settings,
+    merge=True)
+%}
