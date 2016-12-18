@@ -3,7 +3,9 @@
 [Unit]
 Description=etcd {{ etcd_settings.install.version }} distributed key-value store
 Documentation=https://github.com/coreos/etcd
+Documentation=man:etcd
 After=network.target
+Wants=network-online.target
 
 [Service]
 User=root
@@ -11,6 +13,7 @@ Type=notify
 EnvironmentFile={{ etcd_settings.init_override_file }}
 WorkingDirectory={{ etcd_settings.data_directory }}
 ExecStart={{ etcd_settings.binary_directory }}/etcd
+StandardOutput=syslog
 Restart=always
 RestartSec=10s
 LimitNOFILE=40000
