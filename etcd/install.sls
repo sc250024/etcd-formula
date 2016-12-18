@@ -25,7 +25,7 @@ etcd-download:
 
 etcd-extract:
   cmd.run:
-    - name: tar xzf {{ etcd_archive_name }} --strip-components 1
+    - name: tar xzf {{ etcd_archive_name }} --no-same-owner --strip-components 1
     - cwd: {{ etcd_settings.binary_directory }}
     - unless: test -f etcd
 
