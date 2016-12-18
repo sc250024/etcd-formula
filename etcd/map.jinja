@@ -4,9 +4,17 @@
 {## Start with defaults from defaults.yaml ##}
 {% import_yaml "etcd/defaults.yaml" as default_settings %}
 
+{## Init specific options ##}
+{% set init_settings = salt['grains.filter_by']({
+    'systemd': {
+        'init_file_path': '/etc/systemd/system/remote_syslog.service'
+        'init_reload_cmd': 'systemctl daemon-reload'
+    },
+    'upstart': {
+        'init_file_path': '/etc/init/remote_syslog.conf',
+        'init_reload_cmd': 'initctl reload-configuration',
+    },
+}, grain='init', merge=default_settings, default='systemd') %}
+
 {# Update settings defaults from pillar data #}
-{% set etcd_settings = salt['pillar.get'](
-    'etcd',
-    default=default_settings.etcd,
-    merge=True)
-%}
+{% set etcd_settings = salt['pillar.get']('etcd', merge=init_settings) %}

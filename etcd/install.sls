@@ -29,10 +29,10 @@ etcd-extract:
     - cwd: {{ etcd_settings.binary_directory }}
     - unless: test -f etcd
 
-etcd-upstart-file:
+etcd-{{ grains['init'] }}-file:
   file.managed:
     - name: /etc/init/etcd.conf
-    - source: salt://etcd/files/etcd.conf.jinja
+    - source: salt://etcd/files/etcd.conf.{{ grains['init'] }}.jinja
     - user: root
     - group: root
     - mode: 0644
