@@ -16,7 +16,7 @@ ExecStart={{ etcd_settings.binary_directory }}/etcd
 StandardOutput=syslog
 Restart=always
 RestartSec=10s
-LimitNOFILE=40000
+LimitNOFILE=65536
 
 [Install]
 WantedBy=multi-user.target
